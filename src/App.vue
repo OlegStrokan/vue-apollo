@@ -24,6 +24,9 @@ export default {
   methods: {
     createPost(post) {
       this.posts.unshift(post)
+    },
+    deletePost(id) {
+      this.posts.filter(post => post.id !== id)
     }
   }
 }
