@@ -1,7 +1,12 @@
 <template>
   <div class="app">
-    <PostForm @create="createPost"/>
-    <PostList :posts="posts"/>
+    <h1>Page with posts</h1>
+    <input type="text">
+    <MyButton @click="showDialog">Create post</MyButton>
+    <MyDialog v-model:show="dialogVisible">
+      <PostForm @create="createPost"/>
+    </MyDialog>
+    <PostList :posts="posts" @remove="removePost"/>
 
   </div>
 </template>
@@ -19,14 +24,19 @@ export default {
       posts: [],
       title: '',
       body: '',
+      dialogVisible: false,
     }
   },
   methods: {
     createPost(post) {
-      this.posts.unshift(post)
+      this.posts.unshift(post);
+      this.dialogVisible = false;
     },
-    deletePost(id) {
-      this.posts.filter(post => post.id !== id)
+    removePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id)
+    },
+    showDialog() {
+      this.dialogVisible = true;
     }
   }
 }
