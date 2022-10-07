@@ -40,7 +40,7 @@ export default {
   margin: auto;
   padding: 20px;
   background: white;
-  border-radius: 12p9;
+  border-radius: 12px;
   min-height: 50px;
   min-width: 300px;
 }
