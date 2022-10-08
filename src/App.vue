@@ -3,7 +3,9 @@
     <h1>Page with posts</h1>
     <div class="app__btns">
       <MyButton @click="showDialog" style="margin: 15px 0;">Create post</MyButton>
-      <MySelect v-model="selectedSort">
+      <MySelect
+          v-model="selectedSort"
+          :options="sortOptions">
 
       </MySelect>
     </div>
@@ -31,7 +33,8 @@ export default {
       isPostsLoading: false,
       selectedSort: '',
       sortOptions: [
-
+        { value: 'title', name: 'With title'},
+        { value: 'body', name: 'With body'},
       ]
     }
   },
@@ -59,6 +62,18 @@ export default {
   },
   mounted() {
     this.fetchPosts()
+  },
+  watch: {
+    selectedSort() {
+    this.posts.sort((firstPost,secondPost) => {
+      return firstPost[this.selectedSort]?.localeCompare(secondPost[this.selectedSort])
+    })
+    },
+  },
+  computed: {
+    sort() {
+      return this.posts
+    }
   }
 }
 </script>
@@ -76,7 +91,7 @@ export default {
 }
 
 .app__btns {
-  margin: 15px;
+  margin: 15px 0;
   display: flex;
   justify-content: space-between;
 }

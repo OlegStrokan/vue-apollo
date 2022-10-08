@@ -1,5 +1,6 @@
+/* eslint-disable */
 <template>
-<select v-model="modelValue" @change="changeOption">
+  <select :value="modelValue" @change="changeOption">
   <option disabled value="">Choice item</option>
   <option
       v-for="option in options"
@@ -22,10 +23,9 @@ export default {
       default: () => []
     }
   },
-
   methods: {
     changeOption(event) {
-      this.$emit('update:modelValue', event)
+      this.$emit('update:modelValue', event.target.value)
     }
   }
 }
