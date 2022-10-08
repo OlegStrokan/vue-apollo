@@ -17,11 +17,9 @@
 </template>
 
 <script>
-import MyButton from "@/components/UI/MyButton";
-import MyInput from "@/components/UI/MyInput";
+
 export default {
   name: "PostForm",
-  components: {MyInput, MyButton},
   data() {
     return {
       post: {

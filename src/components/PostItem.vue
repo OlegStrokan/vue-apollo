@@ -11,10 +11,8 @@
 </template>
 
 <script>
-import MyButton from "@/components/UI/MyButton";
 export default {
   name: "PostItem",
-  components: {MyButton},
   props: {
     post: {
       type: Object,
