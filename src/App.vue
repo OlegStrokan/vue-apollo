@@ -10,7 +10,7 @@
       <MySelect
           v-model="selectedSort"
           :options="sortOptions"
-        />
+      />
     </div>
     <MyDialog v-model:show="dialogVisible">
       <PostForm @create="createPost"/>
@@ -20,7 +20,19 @@
         :posts="sortedAndSearchedPosts"
         @remove="removePost"
     />
-
+    <div v-else>Downloading...</div>
+    <div ref="observer" class="observer"></div>
+<!--    <div class="page__wrapper">
+      <div
+          v-for="pageNumber in totalPages"
+          :key="pageNumber"
+          class="page"
+          :class="{
+            'current-page': page === pageNumber
+          }"
+          @click="changePage(pageNumber)"
+      >{{ pageNumber }}</div>
+    </div>-->
   </div>
 </template>
 
@@ -40,9 +52,12 @@ export default {
       isPostsLoading: false,
       selectedSort: '',
       searchQuery: '',
+      totalPages: null,
+      page: 1,
+      limit: 10,
       sortOptions: [
-        { value: 'title', name: 'With title'},
-        { value: 'body', name: 'With body'},
+        {value: 'title', name: 'With title'},
+        {value: 'body', name: 'With body'},
       ]
     }
   },
@@ -57,12 +72,37 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+   /* changePage(pageNumber) {
+      this.page = pageNumber;
+    },*/
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10', {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        })
         this.posts = response.data;
         this.isPostsLoading = false;
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+      } catch {
+        console.log('error')
+      }
+    },
+
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10', {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        })
+        this.posts = [...this.posts, ...response.data];
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
       } catch {
         console.log('error')
       }
@@ -70,16 +110,34 @@ export default {
   },
   mounted() {
     this.fetchPosts()
+    const options = {
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+
+    const callback = (entries) => {
+      if (entries[0].isIntersecting) {
+        this.loadMorePosts()
+      }
+    }
+
+    const observer = new IntersectionObserver(callback, options)
+    observer.observe(this.$refs.observer)
   },
   computed: {
-     sortedPosts() {
-       return [...this.posts].sort((firstPost,secondPost) => {
-         return firstPost[this.selectedSort]?.localeCompare(secondPost[this.selectedSort])
-       })
+    sortedPosts() {
+      return [...this.posts].sort((firstPost, secondPost) => {
+        return firstPost[this.selectedSort]?.localeCompare(secondPost[this.selectedSort])
+      })
     },
     sortedAndSearchedPosts() {
-       return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
     }
+  },
+  watch: {
+ /*   page() {
+      this.fetchPosts();
+    }*/
   }
 }
 </script>
@@ -102,5 +160,23 @@ export default {
   justify-content: space-between;
 }
 
+.page__wrapper {
+  display: flex;
+  margin-top: 15px;
+}
+
+.page {
+  border: 1px solid;
+  padding: 10px;
+}
+
+.current-page {
+  border: 2px solid teal;
+}
+
+.observer {
+  height: 30px;
+  background: gray;
+}
 
 </style>
