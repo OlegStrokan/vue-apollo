@@ -4,7 +4,9 @@
     <MyInput
         v-model="searchQuery"
         type="text"
-        placeholder="Search post..."/>
+        placeholder="Search post..."
+        v-focus
+    />
     <div class="app__btns">
       <MyButton @click="showDialog" style="margin: 15px 0;">Create post</MyButton>
       <MySelect
