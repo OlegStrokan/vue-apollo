@@ -7,12 +7,14 @@
 </template>
 
 <script>
-
 import toggleMixin from "@/mixins/toggleMixin";
 
 export default {
-  name: "MyDialog",
-  mixins: [toggleMixin]
+  name: 'my-dialog',
+  mixins: [toggleMixin],
+  mounted() {
+    console.log('dialog mounted')
+  }
 }
 </script>
 
@@ -22,17 +24,17 @@ export default {
   bottom: 0;
   right: 0;
   left: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   position: fixed;
   display: flex;
 }
 
 .dialog__content {
   margin: auto;
-  padding: 20px;
   background: white;
   border-radius: 12px;
   min-height: 50px;
   min-width: 300px;
+  padding: 20px;
 }
 </style>

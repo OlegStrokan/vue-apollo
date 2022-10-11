@@ -1,31 +1,43 @@
-import MyMain from "@/pages/MyMain";
+import Main from "@/pages/MainPage";
 import {createRouter, createWebHistory} from "vue-router";
-import AboutPage from "@/pages/AboutPage";
-import PostsPage from "@/pages/PostsPage";
-import PostPage from "@/pages/PostPage";
+import UserPage from "@/pages/UserPage";
+import About from "@/pages/AboutPage";
+import PostIdPage from "@/pages/PostIdPage";
+import PostPageWithStore from "@/pages/PostPageWithStore";
+import PostPageCompositionApi from "@/pages/PostPageCompositionApi";
+
 
 const routes = [
     {
         path: '/',
-        component: MyMain
+        component: Main
     },
     {
         path: '/posts',
-        component: PostsPage
+        component: UserPage
     },
     {
         path: '/about',
-        component: AboutPage
+        component: About
     },
     {
         path: '/posts/:id',
-        component: PostPage
-    }
+        component: PostIdPage
+    },
+    {
+        path: '/store',
+        component: PostPageWithStore
+    },
+    {
+        path: '/composition',
+        component: PostPageCompositionApi
+    },
+
 ]
 
-
-export const router = createRouter({
+const router = createRouter({
     routes,
     history: createWebHistory(process.env.BASE_URL)
-
 })
+
+export default router;

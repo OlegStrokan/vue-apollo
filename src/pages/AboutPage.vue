@@ -1,12 +1,12 @@
 <template>
-<div>
-  <h1>Info about application</h1>
-</div>
+  <div>
+    <h1>Данное приложение было создано в результате обучения на канале Ulbi TV</h1>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "AboutPage"
+name: "AboutPage"
 }
 </script>
 
